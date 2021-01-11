@@ -8,36 +8,34 @@ use Psr\Log\LoggerInterface;
 class DisableProduct implements \Magento\Framework\Event\ObserverInterface
 {
     /**
-     * Undocumented variable
-     *
-     * @var [type]
+     * @var \Magento\CatalogInventory\Model\Stock\StockItemRepository
      */
     protected $_stockItemRepository;
     /**
-     * Undocumented variable
-     *
-     * @var [type]
+     * @var \Magento\InventorySalesAdminUi\Model\GetSalableQuantityDataBySku
      */
     protected $_getSalableQuantityDataBySku;
     /**
-     * Undocumented variable
-     *
-     * @var [type]
+     * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
     /**
-     * Undocumented variable
-     *
-     * @var [type]
+     * @var LoggerInterface
      */
     protected $_logger;
     /**
-     * Undocumented variable
-     *
-     * @var [type]
+     * @var \Magento\Catalog\Model\ProductRepository
      */
     protected $_productRepository;
 
+    /**
+     * DisableProduct constructor.
+     * @param \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository
+     * @param \Magento\InventorySalesAdminUi\Model\GetSalableQuantityDataBySku $getSalableQuantityDataBySku
+     * @param \Magento\Catalog\Model\ProductRepository $productRepository
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param LoggerInterface $logger
+     */
     public function __construct(
         \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository,
         \Magento\InventorySalesAdminUi\Model\GetSalableQuantityDataBySku $getSalableQuantityDataBySku,
@@ -53,7 +51,8 @@ class DisableProduct implements \Magento\Framework\Event\ObserverInterface
     }
 
     /**
-     * @inheritDoc
+     *  Disable Product when out stock
+     * @param Observer $observer
      */
     public function execute(Observer $observer)
     {
@@ -83,6 +82,9 @@ class DisableProduct implements \Magento\Framework\Event\ObserverInterface
                     $this->_logger->debug($salable_qty);
                     if ($salable_qty == 0) {
                         $product->setData('status', 2);
+                        $product->getResource()->saveAttribute($product, 'status');
+                    }else {
+                        $product->setData('status', 1);
                         $product->getResource()->saveAttribute($product, 'status');
                     }
                 }

@@ -3,7 +3,7 @@
     <event name="sales_order_place_after">
         <observer name="disable_product" instance="AHT\HelloWorld\Observer\DisableProduct" />
     </event>
-<!--    <event name="catalog_product_save_after">-->
-<!--        <observer name="enable_product" instance="AHT\HelloWorld\Observer\EnableProduct" />-->
-<!--    </event>-->
+    <event name="catalog_product_save_after">
+        <observer name="enable_product" instance="AHT\HelloWorld\Observer\EnableProduct" />
+    </event>
 </config>
